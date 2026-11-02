@@ -24,7 +24,7 @@ on:
 
 jobs:
   initialization-tests-v1:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         k8s_version: [ "v1.29.2", "v1.31.0" ]
@@ -74,7 +74,7 @@ jobs:
           path: /tmp/tmp*/*
 
   initialization-tests-v2:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         k8s_version: [ "v1.29.2", "v1.31.0" ]
@@ -124,7 +124,7 @@ jobs:
           path: /tmp/tmp*/*
 
   api-integration-tests-v1:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         k8s_version: [ "v1.29.2", "v1.31.0" ]
@@ -180,7 +180,7 @@ jobs:
           path: /tmp/tmp*/*
 
   api-integration-tests-v2:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         pipeline_store: [ "database", "kubernetes" ]
@@ -239,7 +239,7 @@ jobs:
           path: /tmp/tmp*/*
 
   api-integration-tests-v2-with-proxy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         k8s_version: [ "v1.31.0" ]
@@ -297,7 +297,7 @@ jobs:
           path: /tmp/tmp*/*
 
   api-integration-tests-v2-with-cache-disabled:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         k8s_version: [ "v1.31.0" ]
@@ -354,7 +354,7 @@ jobs:
           path: /tmp/tmp*/*
 
   frontend-integration-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         k8s_version: [ "v1.29.2", "v1.31.0" ]
@@ -411,7 +411,7 @@ jobs:
           path: /tmp/tmp*/*
 
   basic-sample-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         k8s_version: [ "v1.29.2", "v1.31.0" ]

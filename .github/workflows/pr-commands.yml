@@ -7,7 +7,7 @@ env:
   DEFAULT_BRANCH: master
 jobs:
   process-command:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Fail early if the command is not recognized
     if: contains(github.event.comment.body, '/ok-to-test')
     outputs:
@@ -58,7 +58,7 @@ jobs:
 
   # Add other commands as separate jobs
   approve:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: process-command
     if: contains(github.event.comment.body, '/ok-to-test')
     steps:
