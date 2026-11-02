@@ -21,7 +21,7 @@ on:
 
 jobs:
   samples:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         k8s_version: [ "v1.29.2", "v1.31.0" ]
