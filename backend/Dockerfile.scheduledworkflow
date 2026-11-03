@@ -18,7 +18,7 @@ ARG FIPS_ENABLED=1
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
 
-FROM registry.access.redhat.com/ubi9/go-toolset:1.26.10-1793705918 AS builder
+FROM registry.access.redhat.com/ubi9/go-toolset:1.26.10@sha256:beaa5163d808534e703aca4d3c2845210f032141eb0b85303c18d453d624d1f0 AS builder
 
 ## Build args to be used at this step
 ARG SOURCE_CODE
