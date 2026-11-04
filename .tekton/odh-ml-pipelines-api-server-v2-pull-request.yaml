@@ -55,6 +55,15 @@ spec:
     value: 5d
   - name: enable-slack-failure-notification
     value: "false"
+  taskRunSpecs:
+  - pipelineTaskName: rpms-signature-scan
+    computeResources:
+      requests:
+        cpu: '2'
+        memory: 4Gi
+      limits:
+        cpu: '4'
+        memory: 8Gi
   pipelineRef:
     resolver: git
     params:
