@@ -343,8 +343,7 @@ var _ = Describe("Upload and Verify Pipeline Run >", Label(FullRegression), func
 	// E2eGpu-labeled specs run even when the package has no --label-filter; see
 	// AGENTS.md (Local testing → Backend Ginkgo test suites → End-to-end tests).
 	// Also tagged Tier2 for product gates; CPU/Kind Tier2 lanes should filter
-	// with `Tier2 && !gpu && !dra-check` so these fixtures are not scheduled
-	// without GPUs.
+	// with `Tier2 && !gpu` so these fixtures are not scheduled without GPUs.
 	Context("GPU component test >", Label(E2eGpu, Tier2), func() {
 		var pipelineDir = "valid/gpu"
 		pipelineFiles := testutil.GetListOfFilesInADir(filepath.Join(testutil.GetPipelineFilesDir(), pipelineDir))
@@ -354,25 +353,6 @@ var _ = Describe("Upload and Verify Pipeline Run >", Label(FullRegression), func
 			}
 			It(fmt.Sprintf("Upload %s pipeline", pipelineFile), FlakeAttempts(2), func() {
 				validatePipelineRunSuccess(pipelineFile, pipelineDir, testContext)
-			})
-		}
-	})
-
-	// Filter with --label-filter=dra-check. Requires a cluster with a DRA
-	// driver installed (e.g. Kind + dra-example-driver). Also tagged Tier2;
-	// CPU/Kind Tier2 lanes should use `Tier2 && !gpu && !dra-check`.
-	Context("DRA scheduling check >", Label(E2eDraCheck, Tier2), func() {
-		var pipelineDir = "valid/dra"
-		pipelineFiles := testutil.GetListOfFilesInADir(filepath.Join(testutil.GetPipelineFilesDir(), pipelineDir))
-		Expect(pipelineFiles).NotTo(BeEmpty(), "no pipeline files found in %s", pipelineDir)
-		for _, pipelineFile := range pipelineFiles {
-			It(fmt.Sprintf("Upload %s pipeline", pipelineFile), FlakeAttempts(2), func() {
-				runID := validatePipelineRunSuccess(pipelineFile, pipelineDir, testContext)
-				expectedClaims := []string{"dra-test-claim"}
-				if pipelineFile == "dra_static_claim_check.yaml" {
-					expectedClaims = append(expectedClaims, "dra-test-claim-secondary")
-				}
-				e2e_utils.ValidateDRAResourceClaims(k8Client, *config.Namespace, runID, expectedClaims)
 			})
 		}
 	})

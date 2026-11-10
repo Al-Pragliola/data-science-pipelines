@@ -202,8 +202,7 @@ Based on the default configuration:
 - `Tier3` - Negative and destructive tests
 - `E2ECritical` - Multi-user critical lane; gate IRs also carry `smoke` or `Tier1` on the same spec (remaining `valid/critical` sweep stays `E2ECritical` + `Tier2`)
 - `integration` - Cross-component integration (also tagged Tier1; Kind CI runs `Tier1 && !integration`)
-- `gpu` - Accelerator-required E2E (also tagged Tier2; CPU/Kind Tier2 uses `Tier2 && !gpu && !dra-check`)
-- `dra-check` - DRA scheduling checks (also tagged Tier2; excluded from Kind Tier2 via `!dra-check`)
+- `gpu` - Accelerator-required E2E (also tagged Tier2; CPU/Kind Tier2 uses `Tier2 && !gpu`)
 - `WorkflowCompiler` - Compiler golden tests (also tagged Tier1; GitHub `compiler-tests.yml` keeps this label)
 - `WorkflowCompilerVisits` - Compiler visitor iteration (also tagged Tier2)
 - `UpgradePreparation` - Seed DSPA API data before a product upgrade (also tagged Tier1; standard Tier1 API jobs use `Tier1 && !UpgradePreparation && !UpgradeVerification`)

@@ -262,7 +262,7 @@ Without `--label-filter`, `gpu`-labeled E2E tests run as well (they request acce
 
 **Other E2E filters:**
 
-- CPU-only or Kind Tier2 runs should use `--label-filter='Tier2 && !gpu && !dra-check'` so accelerator and DRA fixtures stay out of that gate; GPU-capable product lanes can keep `--label-filter=Tier2`, and the dedicated `dra-check` lane covers DRA. NVIDIA vs AMD fixtures: pass `-gpuVendor` flag to `nvidia` (default), `amd`, or `both` so only matching IRs run (`pytorch_nvidia_gpu_availability.yaml` / `pytorch_amd_gpu_availability.yaml`). Any value other than `amd`/`both`/`all` falls back to `nvidia`.
+- CPU-only or Kind Tier2 runs should use `--label-filter='Tier2 && !gpu'` so accelerator fixtures stay out of that gate; GPU-capable product lanes can keep `--label-filter=Tier2`. NVIDIA vs AMD fixtures: pass `-gpuVendor` flag to `nvidia` (default), `amd`, or `both` so only matching IRs run (`pytorch_nvidia_gpu_availability.yaml` / `pytorch_amd_gpu_availability.yaml`). Any value other than `amd`/`both`/`all` falls back to `nvidia`.
 
 Test data is centralized under:
 
@@ -553,7 +553,6 @@ When changing an effect-heavy frontend component, add or run the smallest releva
   - Example: `e2e-test.yml` job "API integration tests v2 - K8s with ${pipeline_store}" and "compile pipelines with Kubernetes".
 - Argo Workflows version matrix for compatibility (where relevant): `e2e-test.yml` exercises `v3.5.14`, `v3.7.3`, and `v4.0.4` across the standard cache/test-label matrix, while `api-server-tests.yml` covers standalone and Kubernetes-native Argo compatibility across the standard matrices (with standalone low-Kubernetes spot lanes per supported Argo version).
 - Proxy / cache toggles: dedicated jobs run with HTTP proxy enabled and with execution cache disabled to validate those modes.
-- Dynamic Resource Allocation (DRA): `e2e-test.yml` has a `dra-check` Kind lane on Kubernetes `v1.34.3`. It installs the DRA example driver and validates static, JSON, and passthrough pod resource claims.
 - The MLflow E2E job and the Kubernetes 1.31 MinIO `E2EEssential` matrix lane are temporarily disabled while their CI setup is repaired.
 - Artifacts: failing logs and test outputs are uploaded as workflow artifacts for debugging.
 
