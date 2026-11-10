@@ -144,7 +144,7 @@ podman run -it \
 
 OpenShift product upgrade jobs run the same Ginkgo suites with `--label-filter=UpgradePreparation` before the
 cluster upgrade and `--label-filter=UpgradeVerification` after upgrade (see `backend/test/v2/api/upgrade_api_test.go`
-and `upgrade_aipipelines_verification_test.go`). Those specs are also tagged **Tier1** for the quality-gate sheet.
+). Those specs are also tagged **Tier1** for the quality-gate sheet.
 Standard **Tier1** API or E2E jobs on connected clusters should use
 `Tier1 && !UpgradePreparation && !UpgradeVerification` so upgrade orchestration stays on dedicated upgrade lanes only.
 **Kind CI E2E Tier1** uses `Tier1 && !integration` (Ray integration specs need a cluster with that CRD; see `.github/workflows/e2e-test.yml` and `AGENTS.md`)—distinct from the API compound filter above.
@@ -159,33 +159,6 @@ GitHub Actions runs upgrade labels in
 - **Upgrade only:** `--label-filter=UpgradePreparation` or `--label-filter=UpgradeVerification` switches to `v2/api` and skips the random namespace suffix so verification reuses preparation data.
 - **Normal API Tier1:** compound filters such as `Tier1 && !UpgradePreparation && !UpgradeVerification` do **not** change the suite; set `TEST_DIRECTORY=v2/api` in the environment (or `.env`) and run from the test image with that label filter. Substring checks on `Upgrade` inside compound filters are intentionally **not** used.
 - **Disconnected (air-gap) cluster:** runtime setup (bastion MinIO, pip mirror, `-disconnectedCluster=true`) applies to all non-upgrade runs. Label selection: no explicit `--label-filter` → `disconnected`; explicit **`smoke`** → `smoke && disconnected` (not bare `smoke`). Any other explicit filter (including `disconnected`, Tier1, API compound, etc.) is left unchanged; there may be zero matching specs (e.g. Tier1 on air-gap today), and **`--fail-on-empty`** fails the lane in that case.
-
-### Modular AIPipelines acceptance criteria (post-upgrade)
-
-After a platform upgrade, `UpgradeVerification` checks the cluster-scoped modular **AIPipelines** operand when
-the CRD `aipipelines.components.platform.opendatahub.io` is present. If the CRD is absent and
-`EXPECTED_PLATFORM_RELEASE_VERSION` is set (required on RHOAI/ODH product upgrade jobs), the test **fails**. If
-both the CRD and that variable are unset, the spec is **skipped** (for example Kind KFP upgrade CI without the
-modular module):
-
-1. CRD exists and is Established
-2. Cluster-scoped `default-aipipelines` exists and is reconciled (`status.observedGeneration == metadata.generation`)
-3. `status.phase == Ready`
-4. Conditions `Ready`, `ProvisioningSucceeded`, `DSPOReady`, and `ArgoWorkflowsControllersReady` are True with
-   matching `observedGeneration`
-5. `status.releases[name=platform].version` matches `EXPECTED_PLATFORM_RELEASE_VERSION`
-
-Full DSPA lifecycle and module deletion scenarios remain in DSPO integration and `aipipelines-e2e-test`.
-
-**Required on Jenkins / `rhoai-test-flow` `UpgradeVerification`:** set the target platform release so missing
-CRD or a stale handshake fails closed:
-
-```bash
-export EXPECTED_PLATFORM_RELEASE_VERSION="<target platform version>"
-```
-
-**GitHub Actions Kind CI:** the target `deploy` action exports the `platformVersion` from DSPO's modular
-AIPipelines fixture, and `UpgradeVerification` receives it through `expected_platform_release_version`.
 
 **Out of scope:** RHOAI downgrade paths are not exercised here; downgrade remains a manual / release-process concern.
 
@@ -206,7 +179,7 @@ Based on the default configuration:
 - `WorkflowCompiler` - Compiler golden tests (also tagged Tier1; GitHub `compiler-tests.yml` keeps this label)
 - `WorkflowCompilerVisits` - Compiler visitor iteration (also tagged Tier2)
 - `UpgradePreparation` - Seed DSPA API data before a product upgrade (also tagged Tier1; standard Tier1 API jobs use `Tier1 && !UpgradePreparation && !UpgradeVerification`)
-- `UpgradeVerification` - Verify DSPA API persistence and modular AIPipelines status after upgrade (also tagged Tier1)
+- `UpgradeVerification` - Verify DSPA API persistence after upgrade (also tagged Tier1)
 
 ## Test Execution Flow
 
